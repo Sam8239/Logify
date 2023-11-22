@@ -1,0 +1,47 @@
+body::-webkit-scrollbar {
+    width: 0;
+}
+
+h1,
+h2,
+label,
+option,
+.form-select {
+    font-weight: bold !important;
+}
+
+td,
+th {
+    width: 50%;
+    vertical-align: middle;
+}
+
+body {
+    background-color: #003153 !important;
+    color: white !important;
+}
+
+button {
+    border-radius: 25px !important;
+    padding: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+}
+
+.scrollToTop {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background-color: red;
+    border: solid red 1px;
+}
+
+.scrollToTop:hover {
+    scale: 1.1;
+}
+
+.datepicker {
+    background-color: pink !important;
+    font-weight: 600;
+    padding: 10px !important;
+}
