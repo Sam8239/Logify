@@ -1,6 +1,4 @@
 import json
-import os
-import sys
 from flask import Flask, render_template, request, jsonify, send_file
 
 from flask_socketio import SocketIO, emit
