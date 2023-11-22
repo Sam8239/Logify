@@ -1,3 +1,4 @@
 elasticsearch/
 .vscode/
 temp_export.csv
+venv/

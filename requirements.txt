@@ -1,5 +1,0 @@
-Flask==3.0.0
-Flask_Login==0.6.3
-Flask_SocketIO==5.3.6
-Requests==2.31.0
-elasticsearch==8.11.0
