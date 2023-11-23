@@ -67,7 +67,7 @@ const handleSearchResponse = (response) => {
 	}
 };
 
-// Function to build the results table
+// Function to Build the Results Table Starts
 const buildResultsTable = (results, startIndex) => {
 	const table = $("<table>", { id: "table", class: "table table-success" });
 	const thead = $("<thead>").append(
@@ -88,6 +88,7 @@ const buildResultsTable = (results, startIndex) => {
 
 	return table.append(thead).append(tbody);
 };
+// Function to Build the Results Table Ends
 
 // Function to build pagination controls Starts
 const buildPaginationControls = (
@@ -130,7 +131,6 @@ const buildPaginationControls = (
 		.append(info)
 		.append(btnGroup.append(prevBtn).append(nextBtn));
 };
-
 // Function to build pagination controls Ends
 
 // Function to Get Filters Starts
@@ -222,7 +222,7 @@ $(document).ready(function () {
 	// Date Picker Bootstrap Ends
 });
 
-// Handle export button click
+// Handle Export Button Click Starts
 $(document).on("click", "#exportButton", function () {
 	// Get the current filters
 	var filters = getFilters();
@@ -249,3 +249,4 @@ $(document).on("click", "#exportButton", function () {
 		},
 	});
 });
+// Handle Export Button Click Ends
