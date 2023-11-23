@@ -26,7 +26,7 @@ const updateResults = (data) => {
 	clearResultsTable();
 
 	if (data.results.length) {
-		scrollToTopButton();
+		$(".scrollToTop").removeAttr("hidden");
 		const { currentPage, pageSize, totalRecords, totalPages } = data;
 		const startIndex = (currentPage - 1) * pageSize + 1;
 
@@ -182,12 +182,6 @@ const clearInput = () => {
 	$("#myForm :input").not("#selectInput").val("");
 };
 // Clear Input Functions Ends
-
-//Scroll to Top Button Function Starts
-const scrollToTopButton = () => {
-	$(".scrollToTop").removeAttr("hidden");
-};
-//Scroll to Top Button Function Ends
 
 $(document).ready(function () {
 	// Single or Multiple Filters Function Starts
