@@ -2,172 +2,71 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Log Query Interface</title>
-	<!-- CSS -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}">
-	<!-- Bootstrap CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-	<!-- Bootstrap JS -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-		crossorigin="anonymous"></script>
-	<!-- Jquery and Ajax -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<!-- Script -->
-	<script src="{{ url_for('static', filename='script.js') }}"></script>
-	<!-- Bootstrap Popper JS -->
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-	<!-- Bootstrap Datepicker CSS and JS -->
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css"
-		integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"
-		integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logify</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='sign_in.css') }}" />
+    <!-- Logo -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- Script -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 
 <body>
-	<div class="container mt-3">
-		<h1 class="text-center mb-4">LOG QUERY INTERFACE</h1>
-		<!-- Form Starts -->
-		<form id="myForm">
-			<div>
-				<label for="query_text">Full-text Search:</label>
-				<input type="text" class="form-control" name="query_text" id="query_text">
-			</div>
+    <div class="container main mt-5 mb-5">
 
-			<!-- Select Field Starts -->
-			<div class="mt-3">
-				<div id="select_field">
-					<label for="selectInput">Select an Filter:</label>
-					<select class="form-select" id="selectInput">
-						<option selected value="level">Level</option>
-						<option value="message">Message</option>
-						<option value="resourceId">Resource ID</option>
-						<option value="timestamp">Timestamp</option>
-						<option value="traceId">Trace ID</option>
-						<option value="spanId">Span ID</option>
-						<option value="commit_hash">Commit</option>
-						<option value="metadata_parentResourceId">
-							Parent Resource ID
-						</option>
-						<option value="date_range">
-							Date Range
-						</option>
-					</select>
-				</div>
+        <div class="d-flex justify-content-center align-items-center">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" height="40px" width="40px">
+            <h1 class="ps-2"><span class="text-warning">LOG</span>IFY</h1>
+        </div>
+        <div class="d-flex justify-content-center align-items-center mt-5">
+            <p class="desc">
+                <span class="b-1"><span class="text-warning">LOG</span>IFY </span>is a versatile logging application designed for
+                efficient log
+                management. It seamlessly integrates Elasticsearch and SQLite databases
+                to ingest, store, and query logs. The app provides a user-friendly
+                interface with robust search functionalities, allowing users to explore
+                logs based on various criteria. Additionally, it offers export features
+                for convenient data retrieval and analysis.
+            </p>
+        </div>
+        <div class="mt-5">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="mt-2 text-center alternate">
+                    <p class="m-0">Don't have an account?</p>
+                    <a href="/sign_up" class="btn btn-success ms-2" role="button">Sign up</a>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="mt-2 text-center alternate">
+                    <p class="m-0">Already have an account?</p>
+                    <a href="/sign_in" class="btn btn-primary ms-2" role="button">Sign in</a>
+                </div>
+            </div>
+        </div>
 
-				<div class="row mt-3" id="levelRow">
-					<div class="col">
-						<label for="level">Level:</label>
-						<input type="text" class="form-control" name="level" id="level">
-					</div>
-				</div>
+    </div>
 
-				<div class="row mt-3" id="messageRow" style="display: none">
-					<div class="col">
-						<label for="message">Message:</label>
-						<input type="text" class="form-control" name="message" id="message">
-					</div>
-				</div>
+    <footer class="fixed-bottom py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a class="text-light p-0">© Copyright 2023</a>
+            </div>
 
-				<div class="row mt-3" id="resourceIdRow" style="display: none">
-					<div class="col">
-						<label for="resourceId">Resource ID:</label>
-						<input type="text" class="form-control" name="resourceId" id="resourceId">
-					</div>
-				</div>
-
-				<div class="row mt-3" id="timestampRow" style="display: none">
-					<div class="col">
-						<label for="timestamp">Timestamp:</label>
-						<input type="text" class="form-control" name="timestamp" id="timestamp">
-					</div>
-				</div>
-
-				<div class="row mt-3" id="traceIdRow" style="display: none">
-					<div class="col">
-						<label for="traceId">Trace ID:</label>
-						<input type="text" class="form-control" name="traceId" id="traceId">
-					</div>
-				</div>
-
-				<div class="row mt-3" id="spanIdRow" style="display: none">
-					<div class="col">
-						<label for="spanId">Span ID:</label>
-						<input type="text" class="form-control" name="spanId" id="spanId">
-					</div>
-				</div>
-
-				<div class="row mt-3" id="commitRow" style="display: none">
-					<div class="col">
-						<label for="commit_hash">Commit:</label>
-						<input type="text" class="form-control" name="commit_hash" id="commit_hash">
-					</div>
-				</div>
-
-				<div class="row mt-3" id="metadata_parentResourceIdRow" style="display: none">
-					<div class="col">
-						<label for="metadata_parentResourceId">Parent Resource ID:</label>
-						<input type="text" class="form-control" name="metadata.parentResourceId"
-							id="metadata_parentResourceId">
-					</div>
-				</div>
-				<div class="row mt-3" id="date_rangeRow" style="display: none">
-					<div class="col">
-						<label for="start_date">Start Date:</label>
-						<input type="text" class="form-control" name="start_date" id="start_date">
-					</div>
-					<div class="col">
-						<label for="end_date">End Date:</label>
-						<input type="text" class="form-control" name="end_date" id="end_date">
-					</div>
-				</div>
-
-			</div>
-			<!-- Select Field Ends -->
-
-			<!-- Buttons Starts -->
-			<div class="mt-4 text-center">
-				<button type="button" class="btn btn-primary me-4" onclick="submitForm()">
-					Search
-				</button>
-				<button type="button" class="btn btn-danger me-4" onclick="onClear()">
-					Clear
-				</button>
-				<button id="toggle_filter" type="button" class="btn btn-warning">
-					Multiple Filters
-				</button>
-			</div>
-			<!-- Buttons Ends -->
-
-		</form>
-		<!-- Form Ends -->
-
-		<!-- Result Starts -->
-		<div class="text-center mt-4">
-			<div id="results-container">
-
-			</div>
-		</div>
-		<!-- Result Ends -->
-	</div>
-
-	<!-- Scroll to Top Button Starts -->
-	<div id="scrollToTop" class="d-flex align-items-center justify-content-center mb-3">
-
-		<a href="#top"><img hidden class="scrollToTop" src="{{ url_for('static', filename='images/up-arrow.png') }}"
-				alt="up_arrow"></a>
-
-	</div>
-	<!-- Scroll to Top Button Ends -->
+            <div>
+                <a class="text-info p-0 " href="/privacy_policy">Privacy Policy</a>
+                <a class="text-warning p-0 ms-4" href="/terms_of_service">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
