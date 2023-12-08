@@ -1,5 +1,7 @@
 
+<center>
 ![Logo](https://github.com/Sam8239/Log-Ingestor-and-Query-Interface/blob/main/static/images/logo.png)
+</center>
 
 # Logify - Log Management Application
 
