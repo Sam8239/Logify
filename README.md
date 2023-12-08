@@ -1,7 +1,6 @@
-
-<center>
-![Logo](https://github.com/Sam8239/Log-Ingestor-and-Query-Interface/blob/main/static/images/logo.png)
-</center>
+<p align="center">
+  <img src="[http://some_place.com/image.png](https://github.com/Sam8239/Log-Ingestor-and-Query-Interface/blob/main/static/images/logo.png)" />
+</p>
 
 # Logify - Log Management Application
 
