@@ -4,11 +4,11 @@ from datetime import datetime
 import time
 
 # Log ingestor endpoint
-ingestor_url = "http://localhost:3000/ingest"
+ingestor_url = "http://localhost:5000/ingest"
 
 # Sample log data
 log_data = {
-    "level": "info",
+    "level": "danger",
     "message": "Application started",
     "resourceId": "server-1234",
     "timestamp": "",
@@ -19,7 +19,7 @@ log_data = {
 }
 
 # Number of logs to generate
-num_logs = 2
+num_logs = 10
 
 # Send logs to the log ingestor
 for _ in range(num_logs):
@@ -34,6 +34,3 @@ for _ in range(num_logs):
             print(f"Failed to ingest log. Status code: {response.status_code}")
     except requests.RequestException as e:
         print(f"Error sending log: {e}")
-
-    # Sleep for a short duration before sending the next log (optional)
-    # time.sleep(1)

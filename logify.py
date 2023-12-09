@@ -12,7 +12,7 @@ from flask import (
 )
 from authlib.integrations.flask_client import OAuth
 from requests_oauthlib import OAuth2Session
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 
 from datetime import datetime
 from elasticsearch import Elasticsearch
@@ -43,8 +43,21 @@ ELASTICSEARCH_CLIENT = Elasticsearch(
     ]
 )
 
+# Google Authentication Setup
+oauth = OAuth(app)
+google = oauth.register(
+    name="google",
+    client_id="733206789517-gov8spukuv8ou0k1nf192qjskmmlh14e.apps.googleusercontent.com",
+    client_secret="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",
+    redirect_uri="http://localhost:5000/login/authorized",
+    client_kwargs={"scope": "openid profile email"},
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+)
 
-# Create SQLite Database Table
+
+# Functions Starts
+# Log Ingestor Starts
+# Create SQLite Database for Logs
 def create_sqlite_database():
     try:
         conn = sqlite3.connect(SQLITE_DATABASE_FILE)
@@ -72,18 +85,52 @@ def create_sqlite_database():
             conn.close()
 
 
-oauth = OAuth(app)
-google = oauth.register(
-    name="google",
-    client_id="733206789517-gov8spukuv8ou0k1nf192qjskmmlh14e.apps.googleusercontent.com",
-    client_secret="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",
-    redirect_uri="http://localhost:5000/login/authorized",
-    client_kwargs={"scope": "openid profile email"},
-    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
-)
+def insert_log_entry_sqlite(log_entry):
+    try:
+        conn = sqlite3.connect(SQLITE_DATABASE_FILE)
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO logs (
+                timestamp, level, message, resourceId, traceId, spanId, commit_hash, metadata
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+            (
+                log_entry["timestamp"],
+                log_entry["level"],
+                log_entry["message"],
+                log_entry["resourceId"],
+                log_entry["traceId"],
+                log_entry["spanId"],
+                log_entry["commit_hash"],
+                json.dumps(log_entry["metadata"]),
+            ),
+        )
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Error inserting log entry into SQLite database: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
-# Functions Starts
+def index_log_entry_elasticsearch(log_entry):
+    try:
+        ELASTICSEARCH_CLIENT.index(index=ELASTICSEARCH_INDEX, body=log_entry)
+    except Exception as e:
+        print(f"Error indexing log entry into Elasticsearch: {e}")
+
+
+def insert_log_entries(log_entries):
+    for log_entry in log_entries:
+        insert_log_entry_sqlite(log_entry)
+        index_log_entry_elasticsearch(log_entry)
+
+
+# Log Ingestor Ends
+
+
+# Create SQLite Database for Users
 def create_user_table():
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
@@ -370,7 +417,7 @@ def are_values_different(filters1, filters2):
     )
 
 
-# Merge Two Filters
+# Merge Filters from Full Text and Filters Search
 def merge_filters(filters1, filters2):
     return {
         key: filters1.get(key, filters2.get(key, ""))
@@ -415,9 +462,9 @@ def export_to_csv(results):
 
 # Functions Ends
 
+
 # Routes Starts
-
-
+# Index
 @app.route("/")
 def index():
     if "google_token" in session:
@@ -445,6 +492,7 @@ def index():
         return render_template("index.html")
 
 
+# Sign up
 @app.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
     if request.method == "POST":
@@ -469,25 +517,7 @@ def sign_up():
     return render_template("sign_up.html")
 
 
-@app.route("/add_users", methods=["GET", "POST"])
-def add_users():
-    if request.method == "POST":
-        email = request.form.get("email")
-        role = request.form.get("role")
-
-        # Check if the user with the same email already exists
-        existing_user = get_user(email)
-
-        if existing_user:
-            flash(
-                "User with this email already exists. Please use a different email or Sign in."
-            )
-        else:
-            create_user(email, role)
-            flash("User with Email: " + email + "has been created.")
-    return render_template("add_users.html")
-
-
+# Sign in
 @app.route("/sign_in")
 def sign_in():
     return render_template("sign_in.html")
@@ -522,6 +552,26 @@ def dashboard():
         return redirect(url_for("sign_in"))
 
 
+# Add Users
+@app.route("/add_users", methods=["GET", "POST"])
+def add_users():
+    if request.method == "POST":
+        email = request.form.get("email")
+        role = request.form.get("role")
+
+        # Check if the user with the same email already exists
+        existing_user = get_user(email)
+
+        if existing_user:
+            flash(
+                "User with this email already exists. Please use a different email or Sign in."
+            )
+        else:
+            create_user(email, role)
+            flash("User with Email: " + email + "has been created.")
+    return render_template("add_users.html")
+
+
 # Checking OAuth Authorization with Google
 @app.route("/login/authorized")
 def authorized():
@@ -552,11 +602,38 @@ def authorized():
         return f"Error: {str(e)}"
 
 
+# Log Ingestor
+@app.route("/ingest", methods=["POST"])
+def ingest_log():
+    data = request.get_json()
+
+    # Add timestamp to the log entry
+    timestamp = datetime.utcnow().isoformat()
+
+    # Construct log entry
+    log_entry = {
+        "timestamp": timestamp,
+        "level": data["level"],
+        "message": data["message"],
+        "resourceId": data["resourceId"],
+        "traceId": data["traceId"],
+        "spanId": data["spanId"],
+        "commit_hash": data["commit_hash"],
+        "metadata": data.get("metadata", {}),
+    }
+
+    insert_log_entries([log_entry])
+
+    return jsonify({"status": "success", "log": log_entry})
+
+
+# Query Interface
 @app.route("/query_interface")
 def query_interface():
     return render_template("query_interface.html")
 
 
+# Export Logs
 @app.route("/export")
 def export_logs():
     # Check if the request method is GET
@@ -603,6 +680,7 @@ def export_logs():
         return "Method Not Allowed", 405
 
 
+# Query Interface Search
 @app.route("/search", methods=["POST"])
 def search_logs():
     query_text = request.form.get("query_text")

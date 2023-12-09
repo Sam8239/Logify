@@ -2,3 +2,5 @@ elasticsearch/
 .vscode/
 temp_export.csv
 venv/
+logs.db
+user.db
