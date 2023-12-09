@@ -133,4 +133,4 @@ If you'd like to contribute to the project:
 Feel free to explore additional features, functionalities, or configurations based on your requirements.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Sam8239/Log-Ingestor-and-Query-Interface/blob/main/LICENSE.md) file for details.
