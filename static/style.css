@@ -10,6 +10,10 @@ option,
     font-weight: bold !important;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 td,
 th {
     width: 50%;
@@ -21,13 +25,6 @@ body {
     background-attachment: fixed;
     background-size: cover;
     color: black !important;
-}
-
-button {
-    border-radius: 25px !important;
-    padding: 10px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px;
 }
 
 .scrollToTop {
@@ -46,4 +43,113 @@ button {
     background-color: pink !important;
     font-weight: 600;
     padding: 10px !important;
+}
+
+body {
+    background-image: url("./images/bg.svg");
+    background-attachment: fixed;
+    background-size: cover;
+    color: black !important;
+}
+
+.desc {
+    text-align: justify;
+    max-width: 520px;
+    font-size: large;
+}
+
+a,
+button {
+    border-radius: 25px !important;
+    padding: 8px 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+}
+
+.form {
+    max-width: 365px;
+    min-width: 365px;
+    padding: 10px 75px;
+    /* margin-left: 75px; */
+    /* margin-right: 75px; */
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+label {
+    padding-left: 0 !important;
+}
+
+.alternate {
+    max-width: 365px;
+    min-width: 365px;
+    padding: 8px 30px;
+    /* margin-left: 75px; */
+    /* margin-right: 75px; */
+    border: 1px solid white;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alert {
+    min-width: 365px;
+    max-width: 365px;
+}
+
+.google-login-btn {
+    transition: background-color .3s, box-shadow .3s;
+
+    padding: 8px 16px 12px 42px !important;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+
+    color: #000000;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: 12px 11px;
+
+}
+
+.login-btn:hover {
+    opacity: 0.95;
+}
+
+a:hover {
+    opacity: 0.95;
+}
+
+.profile-pic {
+    border-radius: 50%;
+}
+
+footer a {
+    font-weight: 100 !important;
+}
+
+footer {
+    background-color: #000000;
+}
+
+h1 {
+    border-bottom: 2px solid #ea4545;
+}
+
+.main {
+    background: rgba(17, 16, 16, 0.23);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.578);
+    backdrop-filter: blur(4.3px);
+    width: fit-content !important;
+    padding: 20px 50px !important;
+    min-height: 81dvh;
 }
