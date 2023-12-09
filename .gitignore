@@ -3,4 +3,4 @@ elasticsearch/
 temp_export.csv
 venv/
 logs.db
-user.db
+users.db
