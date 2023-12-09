@@ -218,6 +218,7 @@ $(document).ready(function () {
 	$("#start_date, #end_date").datepicker({
 		format: "yyyy-mm-dd",
 		autoclose: true,
+		orientation: "top",
 	});
 	// Date Picker Bootstrap Ends
 });

@@ -147,25 +147,7 @@ def create_user_table():
     conn.close()
 
 
-# To add admin user
-def add_admin_user():
-    email = "coolshubham1999@gmail.com"  # Add your email
-    role = "admin"
-
-    conn = sqlite3.connect("users.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM user WHERE email = ?", (email,))
-    user = cursor.fetchone()
-    if not user:
-        # Set the role when signing up
-        cursor.execute("INSERT INTO user (email, role) VALUES (?, ?)", (email, role))
-        conn.commit()
-        user_id = cursor.lastrowid
-        cursor.execute("SELECT * FROM user WHERE id = ?", (user_id,))
-        user = cursor.fetchone()
-    conn.close()
-
-
+# Create Users
 def create_user(email, role="normal"):
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
@@ -730,5 +712,5 @@ def search_logs():
 if __name__ == "__main__":
     create_sqlite_database()
     create_user_table()
-    add_admin_user()
+    create_user("coolshubham1999@gmail.com", "admin")
     socketio.run(app, port=5000, debug="true")
