@@ -474,6 +474,18 @@ def index():
         return render_template("index.html")
 
 
+# Privacy Policy
+@app.route("/privacy_policy")
+def privacy_policy():
+    return render_template("privacy_policy.html")
+
+
+# Terms of Service
+@app.route("/terms_of_service")
+def terms_of_service():
+    return render_template("terms_of_serrvice.html")
+
+
 # Sign up
 @app.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
@@ -584,7 +596,7 @@ def authorized():
         return f"Error: {str(e)}"
 
 
-# Log Ingestor
+# Log Ingestor Starts
 @app.route("/log_ingestor")
 def log_ingestor():
     return render_template("log_ingestor.html")
@@ -615,7 +627,10 @@ def ingest_log():
     return jsonify({"status": "success", "log": log_entry})
 
 
-# Query Interface
+# Log Ingestor Ends
+
+
+# Query Interface Starts
 @app.route("/query_interface")
 def query_interface():
     return render_template("query_interface.html")
@@ -713,6 +728,7 @@ def search_logs():
     )
 
 
+# Query Interface Ends
 # Routes Ends
 
 if __name__ == "__main__":
