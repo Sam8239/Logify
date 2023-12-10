@@ -610,12 +610,7 @@ def ingest_log():
         "metadata": data.get("metadata", {}),
     }
 
-    # Attempt to insert log entries
-    try:
-        insert_log_entries([log_entry])
-        flash("Log ingested successfully", "success")
-    except Exception as e:
-        flash(f"Failed to ingest log. Error: {str(e)}", "error")
+    insert_log_entries([log_entry])
 
     return jsonify({"status": "success", "log": log_entry})
 
