@@ -585,6 +585,12 @@ def authorized():
 
 
 # Log Ingestor
+@app.route("/log_ingestor")
+def log_ingestor():
+    return render_template("log_ingestor.html")
+
+
+# Ingest Logs
 @app.route("/ingest", methods=["POST"])
 def ingest_log():
     data = request.get_json()
@@ -604,7 +610,12 @@ def ingest_log():
         "metadata": data.get("metadata", {}),
     }
 
-    insert_log_entries([log_entry])
+    # Attempt to insert log entries
+    try:
+        insert_log_entries([log_entry])
+        flash("Log ingested successfully", "success")
+    except Exception as e:
+        flash(f"Failed to ingest log. Error: {str(e)}", "error")
 
     return jsonify({"status": "success", "log": log_entry})
 

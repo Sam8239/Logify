@@ -43,14 +43,7 @@ body {
     background-color: pink !important;
     font-weight: 600;
     padding: 10px !important;
-    top: 65px!important;
-}
-
-body {
-    background-image: url("./images/bg.svg");
-    background-attachment: fixed;
-    background-size: cover;
-    color: black !important;
+    top: 65px !important;
 }
 
 .desc {
@@ -71,9 +64,6 @@ button {
     max-width: 365px;
     min-width: 365px;
     padding: 10px 75px;
-    /* margin-left: 75px; */
-    /* margin-right: 75px; */
-    /* border: 1px solid white; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,8 +77,6 @@ label {
     max-width: 365px;
     min-width: 365px;
     padding: 8px 30px;
-    /* margin-left: 75px; */
-    /* margin-right: 75px; */
     border: 1px solid white;
     border-radius: 30px;
     display: flex;
@@ -145,12 +133,17 @@ h1 {
     border-bottom: 2px solid #ea4545;
 }
 
+:root {
+    --max-width: 365px;
+}
+
 .main {
     background: rgba(17, 16, 16, 0.23);
     border-radius: 20px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.578);
     backdrop-filter: blur(4.3px);
-    width: fit-content !important;
+    min-width: 467px !important;
+    max-width: fit-content !important;
     padding: 20px 50px !important;
     min-height: 81dvh;
 }

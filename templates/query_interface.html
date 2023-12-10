@@ -30,8 +30,8 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"
 		integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<!-- Script -->
-		<script defer src="{{ url_for('static', filename='script.js') }}"></script>
+	<!-- Script -->
+	<script defer src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 
 <body>
@@ -48,7 +48,7 @@
 			</div>
 
 			<!-- Select Field Starts -->
-			<div class="mt-3">
+			<div class="mt-2">
 				<div id="select_field">
 					<label for="selectInput">Select an Filter:</label>
 					<select class="form-select" id="selectInput">
@@ -68,69 +68,69 @@
 					</select>
 				</div>
 
-				<div class="row mt-3" id="levelRow">
+				<div class="row mt-2" id="levelRow">
 					<div class="col">
-						<label for="level">Level:</label>
+						<label for="level">Level</label>
 						<input type="text" class="form-control" name="level" id="level">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="messageRow" style="display: none">
+				<div class="row mt-2" id="messageRow" style="display: none">
 					<div class="col">
-						<label for="message">Message:</label>
+						<label for="message">Message</label>
 						<input type="text" class="form-control" name="message" id="message">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="resourceIdRow" style="display: none">
+				<div class="row mt-2" id="resourceIdRow" style="display: none">
 					<div class="col">
-						<label for="resourceId">Resource ID:</label>
+						<label for="resourceId">Resource ID</label>
 						<input type="text" class="form-control" name="resourceId" id="resourceId">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="timestampRow" style="display: none">
+				<div class="row mt-2" id="timestampRow" style="display: none">
 					<div class="col">
-						<label for="timestamp">Timestamp:</label>
+						<label for="timestamp">Timestamp</label>
 						<input type="text" class="form-control" name="timestamp" id="timestamp">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="traceIdRow" style="display: none">
+				<div class="row mt-2" id="traceIdRow" style="display: none">
 					<div class="col">
-						<label for="traceId">Trace ID:</label>
+						<label for="traceId">Trace ID</label>
 						<input type="text" class="form-control" name="traceId" id="traceId">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="spanIdRow" style="display: none">
+				<div class="row mt-2" id="spanIdRow" style="display: none">
 					<div class="col">
-						<label for="spanId">Span ID:</label>
+						<label for="spanId">Span ID</label>
 						<input type="text" class="form-control" name="spanId" id="spanId">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="commit_hashRow" style="display: none">
+				<div class="row mt-2" id="commit_hashRow" style="display: none">
 					<div class="col">
-						<label for="commit_hash">Commit:</label>
+						<label for="commit_hash">Commit</label>
 						<input type="text" class="form-control" name="commit_hash" id="commit_hash">
 					</div>
 				</div>
 
-				<div class="row mt-3" id="metadata_parentResourceIdRow" style="display: none">
+				<div class="row mt-2" id="metadata_parentResourceIdRow" style="display: none">
 					<div class="col">
-						<label for="metadata_parentResourceId">Parent Resource ID:</label>
+						<label for="metadata_parentResourceId">Parent Resource ID</label>
 						<input type="text" class="form-control" name="metadata.parentResourceId"
 							id="metadata_parentResourceId">
 					</div>
 				</div>
-				<div class="row mt-3" id="date_rangeRow" style="display: none">
+				<div class="row mt-2" id="date_rangeRow" style="display: none">
 					<div class="col">
-						<label for="start_date">Start Date:</label>
+						<label for="start_date">Start Date</label>
 						<input type="text" class="form-control" name="start_date" id="start_date">
 					</div>
 					<div class="col">
-						<label for="end_date">End Date:</label>
+						<label for="end_date">End Date</label>
 						<input type="text" class="form-control" name="end_date" id="end_date">
 					</div>
 				</div>

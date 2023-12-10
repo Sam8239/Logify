@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logify | Log Ingestor</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Logo -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-32.png') }}" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container mt-5 mb-5 main">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" height="40px" width="40px">
+            <h1 class="ps-2"><span class="text-warning">LOG</span>IFY</h1>
+        </div>
+        <!-- Form Starts -->
+        <form id="logForm">
+            <div class="row mt-3" id="levelRow">
+                <div class="col">
+                    <label for="level">Level</label>
+                    <input type="text" class="form-control" name="level" id="level">
+                </div>
+            </div>
+
+            <div class="row mt-2" id="messageRow">
+                <div class="col">
+                    <label for="message">Message</label>
+                    <input type="text" class="form-control" name="message" id="message">
+                </div>
+            </div>
+
+            <div class="row mt-2" id="resourceIdRow">
+                <div class="col">
+                    <label for="resourceId">Resource ID</label>
+                    <input type="text" class="form-control" name="resourceId" id="resourceId">
+                </div>
+            </div>
+
+            <div class="row mt-2" id="traceIdRow">
+                <div class="col">
+                    <label for="traceId">Trace ID</label>
+                    <input type="text" class="form-control" name="traceId" id="traceId">
+                </div>
+            </div>
+
+            <div class="row mt-2" id="spanIdRow">
+                <div class="col">
+                    <label for="spanId">Span ID</label>
+                    <input type="text" class="form-control" name="spanId" id="spanId">
+                </div>
+            </div>
+
+            <div class="row mt-2" id="commit_hashRow">
+                <div class="col">
+                    <label for="commit_hash">Commit</label>
+                    <input type="text" class="form-control" name="commit_hash" id="commit_hash">
+                </div>
+            </div>
+
+            <!-- Metadata Fields -->
+            <fieldset class="mt-3 ">
+                <label for="metadataFields">Metadata</label>
+                <div class="border border-2 border-dark p-3 rounded">
+                    <div id="metadataFields">
+                        <!-- Initial metadata entry -->
+                        <div class="metadataEntry">
+                            <label>Key</label>
+                            <input type="text" class="metadataKey form-control" name="metadataKey[]" required>
+
+                            <label>Value</label>
+                            <input type="text" class="metadataValue form-control" name="metadataValue[]" required>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <button type="button" class="btn btn-info" onclick="addMetadataEntry()">Add Entry</button>
+                        <button type="button" class="btn btn-danger" onclick="removeMetadataEntry()">Remove
+                            Entry</button>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Add more fields as needed -->
+            <div class="mt-3 text-center">
+                <button type="button" class="btn btn-success" onclick="sendLog()">Submit Log</button>
+            </div>
+        </form>
+        <div class="mt-3 text-center pb-2">
+            <a href="/dashboard" class="btn btn-dark" role="button">Back to Dashboard</a>
+        </div>
+    </div>
+    <script>
+        function addMetadataEntry() {
+            // Create a new metadata entry
+            var newMetadataEntry = document.createElement('div');
+            newMetadataEntry.classList.add('metadataEntry');
+
+            // Key input
+            var keyLabel = document.createElement('label');
+            keyLabel.innerText = 'Key';
+            var keyInput = document.createElement('input');
+            keyInput.type = 'text';
+            keyInput.classList.add('metadataKey', 'form-control');
+            keyInput.name = 'metadataKey[]';
+            keyInput.required = true;
+
+            // Value input
+            var keyValue = document.createElement('label');
+            keyValue.innerText = 'Value';
+            var valueInput = document.createElement('input');
+            valueInput.type = 'text';
+            valueInput.classList.add('metadataValue', 'form-control');
+            valueInput.name = 'metadataValue[]';
+            valueInput.required = true;
+
+            // Append inputs to the new entry
+            newMetadataEntry.appendChild(keyLabel);
+            newMetadataEntry.appendChild(keyInput);
+            newMetadataEntry.appendChild(keyValue);
+            newMetadataEntry.appendChild(valueInput);
+
+            // Append the new entry to the container
+            document.getElementById('metadataFields').appendChild(newMetadataEntry);
+        }
+
+        const removeMetadataEntry = () => {
+            // Get all metadata entries
+            let metadataEntries = document.querySelectorAll('.metadataEntry');
+
+            // If there is more than one metadata entry, remove the last one
+            if (metadataEntries.length > 1) {
+                // Get the last metadata entry
+                let lastMetadataEntry = metadataEntries[metadataEntries.length - 1];
+
+                // If there is a last metadata entry, remove it
+                if (lastMetadataEntry) {
+                    lastMetadataEntry.remove();
+                }
+            }
+        }
+
+        function sendLog() {
+            // Get form data
+            var formData = {
+                "level": document.getElementById("level").value,
+                "message": document.getElementById("message").value,
+                "resourceId": document.getElementById("resourceId").value,
+                "traceId": document.getElementById("traceId").value,
+                "spanId": document.getElementById("spanId").value,
+                "commit_hash": document.getElementById("commit_hash").value,
+                "metadata": {},
+            };
+
+            // Add metadata entries
+            var metadataKeys = document.getElementsByClassName('metadataKey');
+            var metadataValues = document.getElementsByClassName('metadataValue');
+
+            for (var i = 0; i < metadataKeys.length; i++) {
+                var key = metadataKeys[i].value;
+                var value = metadataValues[i].value;
+                formData["metadata"][key] = value;
+            }
+
+            // Send log to the log ingestor
+            fetch('http://localhost:5000/ingest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Log ingested successfully.");
+                    } else {
+                        console.error(`Failed to ingest log. Status code: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error sending log: ${error}`);
+                });
+        }
+    </script>
+</body>
+
+</html>

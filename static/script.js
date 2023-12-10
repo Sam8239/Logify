@@ -40,7 +40,7 @@ const updateResults = (data) => {
 		);
 		const heading = "<h2>RESULTS</h2>";
 		const exportButton =
-			'<button id="exportButton" class="btn btn-outline-light border-2">Export to CSV</button>';
+			'<button id="exportButton" class="btn mb-3 btn-outline-light border-2">Export to CSV</button>';
 
 		$("#results-container")
 			.append(heading)
