@@ -101,7 +101,7 @@
         </div>
     </div>
     <script>
-        function addMetadataEntry() {
+        const addMetadataEntry = () => {
             // Create a new metadata entry
             var newMetadataEntry = document.createElement('div');
             newMetadataEntry.classList.add('metadataEntry');
@@ -150,7 +150,7 @@
             }
         }
 
-        function sendLog() {
+        const sendLog = () => {
             // Get form data
             var formData = {
                 "level": document.getElementById("level").value,
