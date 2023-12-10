@@ -483,7 +483,7 @@ def privacy_policy():
 # Terms of Service
 @app.route("/terms_of_service")
 def terms_of_service():
-    return render_template("terms_of_serrvice.html")
+    return render_template("terms_of_service.html")
 
 
 # Sign up

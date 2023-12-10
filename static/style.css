@@ -129,10 +129,6 @@ footer {
     background-color: #000000;
 }
 
-h1 {
-    border-bottom: 2px solid #ea4545;
-}
-
 :root {
     --max-width: 365px;
 }
@@ -146,4 +142,12 @@ h1 {
     max-width: fit-content !important;
     padding: 20px 50px !important;
     min-height: 81dvh;
+}
+
+.para {
+    max-width: 600px;
+}
+
+.para li {
+    margin-bottom: 16px;
 }
