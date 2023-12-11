@@ -20,9 +20,15 @@ import sqlite3
 import re
 import csv
 from io import StringIO
+import os
+from dotenv import load_dotenv
+
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "hfdshf4r3fhfds"
+app.secret_key = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 # SQLite Database Configuration
@@ -47,8 +53,8 @@ ELASTICSEARCH_CLIENT = Elasticsearch(
 oauth = OAuth(app)
 google = oauth.register(
     name="google",
-    client_id="733206789517-gov8spukuv8ou0k1nf192qjskmmlh14e.apps.googleusercontent.com",
-    client_secret="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",
+    client_id=os.getenv("CLIENT_ID"),
+    client_secret=os.getenv("CLIENT_SECRET"),
     redirect_uri="http://localhost:5000/login/authorized",
     client_kwargs={"scope": "openid profile email"},
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",

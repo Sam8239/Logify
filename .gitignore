@@ -4,3 +4,4 @@ temp_export.csv
 venv/
 logs.db
 users.db
+.env
