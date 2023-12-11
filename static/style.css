@@ -74,8 +74,8 @@ label {
 }
 
 .alternate {
-    max-width: 365px;
-    min-width: 365px;
+    /* max-width: 380px; */
+    min-width: fit-content;
     padding: 8px 30px;
     border: 1px solid white;
     border-radius: 30px;
@@ -129,9 +129,6 @@ footer {
     background-color: #000000;
 }
 
-:root {
-    --max-width: 365px;
-}
 
 .main {
     background: rgba(17, 16, 16, 0.23);

@@ -56,7 +56,7 @@ google = oauth.register(
 
 
 # Functions Starts
-# Log Ingestor Starts
+# Log Ingestor Function Starts
 # Create SQLite Database for Logs
 def create_sqlite_database():
     try:
@@ -127,7 +127,7 @@ def insert_log_entries(log_entries):
         index_log_entry_elasticsearch(log_entry)
 
 
-# Log Ingestor Ends
+# Log Ingestor Function Ends
 
 
 # Create SQLite Database for Users
@@ -165,6 +165,7 @@ def create_user(email, role="normal"):
     return user
 
 
+# Get User
 def get_user(email):
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
@@ -176,6 +177,16 @@ def get_user(email):
     return user
 
 
+# Remove User
+def remove_user(email):
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM user WHERE email = ?", (email,))
+    conn.commit()
+    conn.close()
+
+
+# Query Interface Function Sarts
 # SQLite Query Logs
 def query_logs_sqlite(filters, page, page_size):
     try:
@@ -442,6 +453,7 @@ def export_to_csv(results):
     return csv_data.getvalue()
 
 
+# Query Interface Function Ends
 # Functions Ends
 
 
@@ -558,12 +570,31 @@ def add_users():
 
         if existing_user:
             flash(
-                "User with this email already exists. Please use a different email or Sign in."
+                f"User with email {email} already exists. Please use a different email or Sign in."
             )
         else:
             create_user(email, role)
-            flash("User with Email: " + email + "has been created.")
+            flash(f"User with Email: {email} has been created.")
     return render_template("add_users.html")
+
+
+# Remove Users
+@app.route("/remove_users", methods=["GET", "POST"])
+def remove_users():
+    if request.method == "POST":
+        email = request.form.get("email")
+
+        # Check if the user with the same email already exists
+        existing_user = get_user(email)
+
+        if not existing_user:
+            flash(
+                f"User with email {email} doest not exist. Please use a different email."
+            )
+        else:
+            remove_user(email)
+            flash(f"User with Email: {email} has been removed.")
+    return render_template("remove_users.html")
 
 
 # Checking OAuth Authorization with Google

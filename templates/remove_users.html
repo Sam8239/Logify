@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Logify | Add Users</title>
+	<title>Logify | Remove Users</title>
 	<!-- CSS -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 	<!-- Logo -->
@@ -35,22 +35,15 @@
 		</div>
 		<div class="d-flex justify-content-center align-items-center mt-3">
 			<div class="form">
-				<form method="post" action="{{ url_for('add_users') }}">
+				<form method="post" action="{{ url_for('remove_users') }}">
 					<div class="row mb-2">
 						<label for="email">Google Account</label>
 						<input class="form-control" type="text" id="email" name="email" required />
 					</div>
-					<div class="row mb-3">
-						<label for="role">Role</label>
-						<select class="form-select" id="role" name="role" required>
-							<option value="normal">Normal</option>
-							<option value="admin">Admin</option>
-						</select>
-					</div>
 
 					<div class="row">
-						<button class="btn btn-success py-1" type="submit">
-							Sign up
+						<button class="btn btn-danger py-1" type="submit">
+							Remove User
 						</button>
 					</div>
 				</form>
