@@ -74,7 +74,6 @@ label {
 }
 
 .alternate {
-    /* max-width: 380px; */
     min-width: fit-content;
     padding: 8px 30px;
     border: 1px solid white;
