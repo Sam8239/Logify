@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Sam8239/Log-Ingestor-and-Query-Interface/blob/main/static/images/logo.png" />
+  <img src="https://github.com/Sam8239/Log-Ingestor-and-Query-Interface/blob/main/static/banner/banner.png" />
 </p>
 
 # Logify - Log Management Application
