@@ -332,9 +332,11 @@ def query_logs_elasticsearch(filters, page, page_size):
                 total_records,
                 [
                     {
-                        key: {"parentResourceId": value}
-                        if key == "metadata.parentResourceId"
-                        else value
+                        key: (
+                            {"parentResourceId": value}
+                            if key == "metadata.parentResourceId"
+                            else value
+                        )
                         for key, value in hit["_source"].items()
                     }
                     for hit in hits
@@ -772,4 +774,4 @@ if __name__ == "__main__":
     create_sqlite_database()
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    socketio.run(app, port=5000, debug="true")
+    socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)
