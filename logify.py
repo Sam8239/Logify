@@ -111,7 +111,7 @@ def create_postgreSQL_database():
                 traceId TEXT,
                 spanId TEXT,
                 commit_hash TEXT,
-                metadata JSONB
+                metadata TEXT
             )
             """
         )
