@@ -104,16 +104,16 @@ def create_postgreSQL_database():
             """
             CREATE TABLE IF NOT EXISTS logs_details (
                 id SERIAL PRIMARY KEY,
-                timestamp TEXT,
+                timestamp TIMESTAMP,
                 level TEXT,
                 message TEXT,
                 resourceId TEXT,
                 traceId TEXT,
                 spanId TEXT,
                 commit_hash TEXT,
-                metadata TEXT
+                metadata JSONB
             )
-        """
+            """
         )
         conn.commit()
     except psycopg2.Error as e:
@@ -711,7 +711,7 @@ def ingest_log():
 
 # Query Interface Starts
 @app.route("/query_interface")
-@login_required
+# @login_required
 def query_interface():
     return render_template("query_interface.html")
 
@@ -815,5 +815,5 @@ if __name__ == "__main__":
     create_postgreSQL_database()
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    # app.run()
+    app.run()
     # socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)
