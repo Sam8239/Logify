@@ -708,7 +708,7 @@ def ingest_log():
 
 # Query Interface Starts
 @app.route("/query_interface")
-# @login_required
+@login_required
 def query_interface():
     return render_template("query_interface.html")
 
