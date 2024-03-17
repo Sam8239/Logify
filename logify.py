@@ -812,7 +812,7 @@ def search_logs():
 # Routes Ends
 
 if __name__ == "__main__":
-    create_postgreSQL_database
+    create_postgreSQL_database()
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
     # app.run()
