@@ -13,8 +13,6 @@ from flask import (
 from authlib.integrations.flask_client import OAuth
 from requests_oauthlib import OAuth2Session
 
-# from flask_socketio import SocketIO
-
 from datetime import datetime
 from elasticsearch import Elasticsearch
 import psycopg2
@@ -30,7 +28,6 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-# socketio = SocketIO(app)
 
 # PostgreSQL Database Configuration
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
@@ -815,5 +812,4 @@ if __name__ == "__main__":
     create_postgreSQL_database()
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    app.run()
-    # socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)
+    # app.run()
