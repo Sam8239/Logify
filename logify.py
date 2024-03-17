@@ -12,7 +12,8 @@ from flask import (
 )
 from authlib.integrations.flask_client import OAuth
 from requests_oauthlib import OAuth2Session
-from flask_socketio import SocketIO
+
+# from flask_socketio import SocketIO
 
 from datetime import datetime
 from elasticsearch import Elasticsearch
@@ -29,7 +30,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 
 # SQLite Database Configuration
 SQLITE_DATABASE_FILE = "logs.db"
@@ -774,4 +775,5 @@ if __name__ == "__main__":
     create_sqlite_database()
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)
+    # app.run()
+    # socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)
