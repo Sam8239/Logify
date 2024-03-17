@@ -102,7 +102,7 @@ def create_postgreSQL_database():
         cursor = conn.cursor()
         cursor.execute(
             """
-            CREATE TABLE IF NOT EXISTS logs (
+            CREATE TABLE IF NOT EXISTS logs_details (
                 id SERIAL PRIMARY KEY,
                 timestamp TEXT,
                 level TEXT,
@@ -129,7 +129,7 @@ def insert_log_entry_PostgreSQL(log_entry):
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO logs (
+            INSERT INTO logs_details (
                 timestamp, level, message, resourceId, traceId, spanId, commit_hash, metadata
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
@@ -240,7 +240,7 @@ def query_logs_PostgreSQL(filters, page, page_size):
         cursor = conn.cursor()
 
         # Constructing the SQL query based on filters
-        query = "SELECT * FROM logs"
+        query = "SELECT * FROM logs_details"
         conditions = []
         values = []
 
@@ -311,7 +311,7 @@ def query_logs_PostgreSQL(filters, page, page_size):
             query += " WHERE " + " AND ".join(conditions)
 
         # Count total records
-        count_query = f"SELECT COUNT(*) FROM logs {'' if not conditions else 'WHERE ' + ' AND '.join(conditions)}"
+        count_query = f"SELECT COUNT(*) FROM logs_details {'' if not conditions else 'WHERE ' + ' AND '.join(conditions)}"
         cursor.execute(count_query, tuple(values))
         total_records = cursor.fetchone()[0]
 
@@ -339,7 +339,7 @@ def query_logs_PostgreSQL(filters, page, page_size):
         )
 
     except psycopg2.Error as e:
-        print(f"Error querying logs from PostgreSQL: {e}")
+        print(f"Error querying logs_details from PostgreSQL: {e}")
         return 0, []
 
     finally:
@@ -388,7 +388,7 @@ def query_logs_elasticsearch(filters, page, page_size):
             return 0, []
 
     except Exception as e:
-        print(f"Error querying logs from Elasticsearch: {e}")
+        print(f"Error querying logs_details from Elasticsearch: {e}")
         return 0, []
 
 
