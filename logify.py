@@ -60,7 +60,7 @@ google = oauth.register(
     name="google",
     client_id=os.getenv("CLIENT_ID"),
     client_secret=os.getenv("CLIENT_SECRET"),
-    redirect_uri="http://localhost:5000/login/authorized",
+    redirect_uri="https://logify-x2tq.onrender.com/login/authorized",
     client_kwargs={"scope": "openid profile email"},
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
 )
