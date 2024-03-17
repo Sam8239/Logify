@@ -67,6 +67,21 @@ google = oauth.register(
 
 
 # Functions Starts
+# Define authentication function based on Google OAuth
+def is_authenticated():
+    return session.get("google_token") is not None
+
+
+# Custom decorator to check authentication
+def login_required(func):
+    def wrapper(*args, **kwargs):
+        if not is_authenticated():
+            return redirect(url_for("sign_in"))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 # PostgreSQL Connection
 def postgres():
     con = psycopg2.connect(
@@ -696,6 +711,7 @@ def ingest_log():
 
 # Query Interface Starts
 @app.route("/query_interface")
+@login_required
 def query_interface():
     return render_template("query_interface.html")
 
@@ -799,5 +815,5 @@ if __name__ == "__main__":
     create_postgreSQL_database
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    app.run()
+    # app.run()
     # socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)
