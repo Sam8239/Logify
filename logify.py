@@ -17,7 +17,7 @@ from requests_oauthlib import OAuth2Session
 
 from datetime import datetime
 from elasticsearch import Elasticsearch
-import sqlite3
+import psycopg2
 import re
 import csv
 from io import StringIO
@@ -32,8 +32,12 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 # socketio = SocketIO(app)
 
-# SQLite Database Configuration
-SQLITE_DATABASE_FILE = "logs.db"
+# PostgreSQL Database Configuration
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
 
 # Elasticsearch Configuration
 ELASTICSEARCH_INDEX = "logs_index"
@@ -63,16 +67,28 @@ google = oauth.register(
 
 
 # Functions Starts
-# Log Ingestor Function Starts
-# Create SQLite Database for Logs
-def create_sqlite_database():
+# PostgreSQL Connection
+def postgres():
+    con = psycopg2.connect(
+        host=POSTGRES_HOST,
+        port=POSTGRES_PORT,
+        user=POSTGRES_USER,
+        password=POSTGRES_PASSWORD,
+        database=POSTGRES_DB,
+    )
+    return con
+
+
+# Log Ingestor Functions Starts
+# Create PostgreSQL Database for Logs
+def create_postgreSQL_database():
     try:
-        conn = sqlite3.connect(SQLITE_DATABASE_FILE)
+        conn = postgres()
         cursor = conn.cursor()
         cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 timestamp TEXT,
                 level TEXT,
                 message TEXT,
@@ -85,22 +101,22 @@ def create_sqlite_database():
         """
         )
         conn.commit()
-    except sqlite3.Error as e:
-        print(f"Error creating SQLite database: {e}")
+    except psycopg2.Error as e:
+        print(f"Error creating PostgreSQL database: {e}")
     finally:
         if conn:
             conn.close()
 
 
-def insert_log_entry_sqlite(log_entry):
+def insert_log_entry_PostgreSQL(log_entry):
     try:
-        conn = sqlite3.connect(SQLITE_DATABASE_FILE)
+        conn = postgres()
         cursor = conn.cursor()
         cursor.execute(
             """
             INSERT INTO logs (
                 timestamp, level, message, resourceId, traceId, spanId, commit_hash, metadata
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
             (
                 log_entry["timestamp"],
@@ -114,8 +130,8 @@ def insert_log_entry_sqlite(log_entry):
             ),
         )
         conn.commit()
-    except sqlite3.Error as e:
-        print(f"Error inserting log entry into SQLite database: {e}")
+    except psycopg2.Error as e:
+        print(f"Error inserting log entry into PostgreSQL database: {e}")
     finally:
         if conn:
             conn.close()
@@ -130,21 +146,22 @@ def index_log_entry_elasticsearch(log_entry):
 
 def insert_log_entries(log_entries):
     for log_entry in log_entries:
-        insert_log_entry_sqlite(log_entry)
+        insert_log_entry_PostgreSQL(log_entry)
         index_log_entry_elasticsearch(log_entry)
 
 
-# Log Ingestor Function Ends
+# Log Ingestor Functions Ends
 
 
-# Create SQLite Database for Users
+# User Database Functions Starts
+# Create PostgreSQL Database for Users
 def create_user_table():
-    conn = sqlite3.connect("users.db")
+    conn = postgres()
     cursor = conn.cursor()
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS user (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        CREATE TABLE IF NOT EXISTS user_details (
+            id SERIAL PRIMARY KEY,
             email TEXT UNIQUE NOT NULL,
             role TEXT NOT NULL DEFAULT 'normal'
         )
@@ -156,27 +173,31 @@ def create_user_table():
 
 # Create Users
 def create_user(email, role="normal"):
-    conn = sqlite3.connect("users.db")
+    conn = postgres()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM user WHERE email = ?", (email,))
+    cursor.execute("SELECT * FROM user_details WHERE email = %s", (email,))
     user = cursor.fetchone()
     if not user:
         # Set the role when signing up
-        cursor.execute("INSERT INTO user (email, role) VALUES (?, ?)", (email, role))
+        cursor.execute(
+            "INSERT INTO user_details (email, role) VALUES (%s, %s) RETURNING id",
+            (email, role),
+        )
+        user_id = cursor.fetchone()[0]  # Fetch the id of the newly inserted row
         conn.commit()
-        user_id = cursor.lastrowid
-        cursor.execute("SELECT * FROM user WHERE id = ?", (user_id,))
+        cursor.execute("SELECT * FROM user_details WHERE id = %s", (user_id,))
         user = cursor.fetchone()
     conn.close()
-    user = list(user)
+    if user:
+        user = list(user)
     return user
 
 
 # Get User
 def get_user(email):
-    conn = sqlite3.connect("users.db")
+    conn = postgres()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM user WHERE email = ?", (email,))
+    cursor.execute("SELECT * FROM user_details WHERE email = %s", (email,))
     user = cursor.fetchone()
     conn.close()
     if user:
@@ -186,18 +207,21 @@ def get_user(email):
 
 # Remove User
 def remove_user(email):
-    conn = sqlite3.connect("users.db")
+    conn = postgres()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM user WHERE email = ?", (email,))
+    cursor.execute("DELETE FROM user_details WHERE email = %s", (email,))
     conn.commit()
     conn.close()
 
 
-# Query Interface Function Sarts
-# SQLite Query Logs
-def query_logs_sqlite(filters, page, page_size):
+# User Database Functions Ends
+
+
+# Query Interface Functions Sarts
+# PostgreSQL Query Logs
+def query_logs_PostgreSQL(filters, page, page_size):
     try:
-        conn = sqlite3.connect(SQLITE_DATABASE_FILE)
+        conn = postgres()
         cursor = conn.cursor()
 
         # Constructing the SQL query based on filters
@@ -208,7 +232,7 @@ def query_logs_sqlite(filters, page, page_size):
         for key, value in filters.items():
             # To handle nested JSON
             if key == "metadata.parentResourceId" and value:
-                conditions.append('JSON_EXTRACT(metadata, "$.parentResourceId") = ?')
+                conditions.append('JSON_EXTRACT(metadata, "$.parentResourceId") = %s')
                 values.append(value)
 
             # Skip empty values
@@ -218,7 +242,7 @@ def query_logs_sqlite(filters, page, page_size):
                 "start_date",
                 "end_date",
             ]:
-                conditions.append(f"{key} = ?")
+                conditions.append(f"{key} = %s")
                 values.append(value)
 
         # Handle Timestamp Range and Date Range Queries
@@ -265,7 +289,7 @@ def query_logs_sqlite(filters, page, page_size):
                     filters["start_timestamp"],
                     filters["end_timestamp"],
                 )
-            conditions.append("? <= timestamp AND timestamp <= ?")
+            conditions.append("%s <= timestamp AND timestamp <= %s")
             values.extend([start_timestamp, end_timestamp])
 
         if conditions:
@@ -277,7 +301,7 @@ def query_logs_sqlite(filters, page, page_size):
         total_records = cursor.fetchone()[0]
 
         # Apply pagination
-        query += f" LIMIT ? OFFSET ?"
+        query += f" LIMIT %s OFFSET %s"
         values.extend([page_size, (page - 1) * page_size])
         cursor.execute(query, tuple(values))
         paginated_results = cursor.fetchall()
@@ -299,8 +323,8 @@ def query_logs_sqlite(filters, page, page_size):
             ],
         )
 
-    except sqlite3.Error as e:
-        print(f"Error querying logs from SQLite: {e}")
+    except psycopg2.Error as e:
+        print(f"Error querying logs from PostgreSQL: {e}")
         return 0, []
 
     finally:
@@ -362,7 +386,7 @@ def query_logs(filters, page, page_size):
         if not len_filters:
             return 0, []
 
-        # If more than 1 filters query from SQLite
+        # If more than 1 filters query from PostgreSQL
         elif (
             len_filters > 1
             or "start_timestamp" in filters
@@ -372,7 +396,7 @@ def query_logs(filters, page, page_size):
             and filters["start_date"]
             and filters["end_date"]
         ):
-            return query_logs_sqlite(filters, page, page_size)
+            return query_logs_PostgreSQL(filters, page, page_size)
 
         # If only 1 filter then query from Elastic Search
         else:
@@ -462,7 +486,7 @@ def export_to_csv(results):
     return csv_data.getvalue()
 
 
-# Query Interface Function Ends
+# Query Interface Functions Ends
 # Functions Ends
 
 
@@ -772,8 +796,8 @@ def search_logs():
 # Routes Ends
 
 if __name__ == "__main__":
-    create_sqlite_database()
+    create_postgreSQL_database
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    # app.run()
+    app.run()
     # socketio.run(app, port=5000, debug="true", allow_unsafe_werkzeug=True)

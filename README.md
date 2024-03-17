@@ -4,7 +4,7 @@
 
 # Logify - Log Management Application
 
-**Logify** is a versatile logging application designed for efficient log management. It seamlessly integrates Elasticsearch and SQLite databases to ingest, store, and query logs. The app provides a user-friendly interface with robust search functionalities, allowing users to explore logs based on various criteria. Additionally, it offers export features for convenient data retrieval and analysis.
+**Logify** is a versatile logging application designed for efficient log management. It seamlessly integrates Elasticsearch and PostgreSQL databases to ingest, store, and query logs. The app provides a user-friendly interface with robust search functionalities, allowing users to explore logs based on various criteria. Additionally, it offers export features for convenient data retrieval and analysis.
 
 ## Table of Contents
 
@@ -23,17 +23,17 @@
 #### Functionality:
 
 - Receives log entries via HTTP POST requests to the `/ingest` endpoint.
-- Stores log entries in both SQLite and Elasticsearch for persistence and search capabilities.
+- Stores log entries in both PostgreSQL and Elasticsearch for persistence and search capabilities.
 
 #### Database Configuration:
 
-- SQLite database configuration is specified in the `SQLITE_DATABASE_FILE` variable.
+- PostgreSQL database configuration is specified in the `PostgreSQL_DATABASE_FILE` variable.
 - Elasticsearch configuration includes host, port, scheme, and client initialization.
 
-#### SQLite Database:
+#### PostgreSQL Database:
 
-- The `create_sqlite_database` function creates a table named `logs` with columns for various log attributes.
-- Log entries are inserted into SQLite using `insert_log_entry_sqlite`.
+- The `create_PostgreSQL_database` function creates a table named `logs` with columns for various log attributes.
+- Log entries are inserted into PostgreSQL using `insert_log_entry_PostgreSQL`.
 
 #### Elasticsearch Indexing:
 
@@ -52,12 +52,12 @@
 
 #### Database Configuration:
 
-- Similar to the log ingestor, it uses SQLite for local storage and Elasticsearch for search capabilities.
+- Similar to the log ingestor, it uses PostgreSQL for local storage and Elasticsearch for search capabilities.
 
-#### SQLite Database:
+#### PostgreSQL Database:
 
-- The `create_sqlite_database` function creates a table named `logs` with columns similar to the log ingestor.
-- The `query_logs_sqlite` function queries logs from SQLite based on specified filters.
+- The `create_PostgreSQL_database` function creates a table named `logs` with columns similar to the log ingestor.
+- The `query_logs_PostgreSQL` function queries logs from PostgreSQL based on specified filters.
 
 #### Elasticsearch Querying:
 
@@ -65,7 +65,7 @@
 
 #### Hybrid Querying:
 
-- The `query_logs` function decides whether to query logs from SQLite or Elasticsearch based on the number of filters and their types.
+- The `query_logs` function decides whether to query logs from PostgreSQL or Elasticsearch based on the number of filters and their types.
 
 #### Full Text Search:
 
@@ -89,7 +89,7 @@
 
 - Python (version 3.10)
 - Flask
-- SQLite
+- PostgreSQL
 - Elasticsearch
 
 ### Installation
