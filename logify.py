@@ -528,12 +528,14 @@ def index():
 
 # Privacy Policy
 @app.route("/privacy_policy")
+@login_required
 def privacy_policy():
     return render_template("privacy_policy.html")
 
 
 # Terms of Service
 @app.route("/terms_of_service")
+@login_required
 def terms_of_service():
     return render_template("terms_of_service.html")
 
@@ -585,6 +587,7 @@ def logout():
 
 # Dashboard as per Role
 @app.route("/dashboard")
+@login_required
 def dashboard():
     # Retrieve user information from the session
     user_info = session.get("user_info")
@@ -600,6 +603,7 @@ def dashboard():
 
 # Add Users
 @app.route("/add_users", methods=["GET", "POST"])
+@login_required
 def add_users():
     if request.method == "POST":
         email = request.form.get("email")
@@ -620,6 +624,7 @@ def add_users():
 
 # Remove Users
 @app.route("/remove_users", methods=["GET", "POST"])
+@login_required
 def remove_users():
     if request.method == "POST":
         email = request.form.get("email")
@@ -669,6 +674,7 @@ def authorized():
 
 # Log Ingestor Starts
 @app.route("/log_ingestor")
+@login_required
 def log_ingestor():
     return render_template("log_ingestor.html")
 
