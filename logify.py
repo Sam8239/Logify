@@ -81,13 +81,8 @@ def login_required(func):
 
 # PostgreSQL Connection
 def postgres():
-    con = psycopg2.connect(
-        host=POSTGRES_HOST,
-        port=POSTGRES_PORT,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD,
-        database=POSTGRES_DB,
-    )
+    url = f"postgres://admin:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/logify_db"
+    con = psycopg2.connect(url)
     return con
 
 
@@ -812,4 +807,4 @@ if __name__ == "__main__":
     create_postgreSQL_database()
     create_user_table()
     create_user("coolshubham1999@gmail.com", "admin")
-    # app.run()
+    app.run()

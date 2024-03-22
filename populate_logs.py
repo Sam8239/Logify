@@ -4,11 +4,11 @@ from datetime import datetime
 import time
 
 # Log ingestor endpoint
-ingestor_url = "https://logify-x2tq.onrender.com/ingest"
+ingestor_url = "http://127.0.0.1:5000/ingest"
 
 # Sample log data
 log_data = {
-    "level": "info",
+    "level": "error",
     "message": "Application started",
     "resourceId": "server-1234",
     "timestamp": "",
