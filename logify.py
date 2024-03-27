@@ -70,13 +70,17 @@ def is_authenticated():
 
 
 # Custom decorator to check authentication
-def login_required(func):
-    def wrapper(*args, **kwargs):
-        if not is_authenticated():
-            return redirect(url_for("sign_in"))
-        return func(*args, **kwargs)
+def login_required(endpoint_name):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            if not is_authenticated():
+                return redirect(url_for("sign_in"))
+            return func(*args, **kwargs)
 
-    return wrapper
+        wrapper.__name__ = endpoint_name
+        return wrapper
+
+    return decorator
 
 
 # PostgreSQL Connection
@@ -528,14 +532,12 @@ def index():
 
 # Privacy Policy
 @app.route("/privacy_policy")
-@login_required
 def privacy_policy():
     return render_template("privacy_policy.html")
 
 
 # Terms of Service
 @app.route("/terms_of_service")
-@login_required
 def terms_of_service():
     return render_template("terms_of_service.html")
 
@@ -579,6 +581,7 @@ def login():
 
 # Google Sign Out
 @app.route("/logout")
+@login_required("logout")
 def logout():
     session.pop("google_token", None)
     session.pop("user_info", None)
@@ -587,7 +590,7 @@ def logout():
 
 # Dashboard as per Role
 @app.route("/dashboard")
-@login_required
+@login_required("dashboard")
 def dashboard():
     # Retrieve user information from the session
     user_info = session.get("user_info")
@@ -603,7 +606,7 @@ def dashboard():
 
 # Add Users
 @app.route("/add_users", methods=["GET", "POST"])
-@login_required
+@login_required("add_users")
 def add_users():
     if request.method == "POST":
         email = request.form.get("email")
@@ -624,7 +627,7 @@ def add_users():
 
 # Remove Users
 @app.route("/remove_users", methods=["GET", "POST"])
-@login_required
+@login_required("remove_users")
 def remove_users():
     if request.method == "POST":
         email = request.form.get("email")
@@ -674,7 +677,7 @@ def authorized():
 
 # Log Ingestor Starts
 @app.route("/log_ingestor")
-@login_required
+@login_required("log_ingestor")
 def log_ingestor():
     return render_template("log_ingestor.html")
 
@@ -709,13 +712,14 @@ def ingest_log():
 
 # Query Interface Starts
 @app.route("/query_interface")
-@login_required
+@login_required("query_interface")
 def query_interface():
     return render_template("query_interface.html")
 
 
 # Export Logs
 @app.route("/export")
+@login_required("export")
 def export_logs():
     # Check if the request method is GET
     if request.method == "GET":
